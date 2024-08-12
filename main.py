@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import pyqtgraph as pg
 from roulette_table_widget import RouletteTableWidget
+import copy
 
 ####################################################################################################
 # Constants                                                                                        #
@@ -176,7 +177,6 @@ PAYOUT_WIDGET_POS_Y = 660
 PAYOUT_WIDGET_WIDTH = 1050
 PAYOUT_WIDGET_HEIGHT = 150
 
-
 # Video (Blanked out area)
 COLOUR_VIDEO_PLACEHOLDER = COLOUR_YELLOW
 COLOUR_WIDGET_BORDER = COLOUR_YELLOW
@@ -256,16 +256,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.blank_area.setStyleSheet(f"background-color: {COLOUR_VIDEO_PLACEHOLDER};")
 
         ############################################################################################
-        # Chart                                                                                    #
+        # Cumulative Chart                                                                         #
         ############################################################################################  
         self.plotWidget = pg.PlotWidget(self)
         self.plotWidget.setGeometry(0, WINDOW_HEIGHT - CHART_HEIGHT, WINDOW_WIDTH, CHART_HEIGHT)
         self.plotWidget.setFixedHeight(CHART_HEIGHT)
         self.plotWidget.setBackground(COLOUR_CHART_BACKGROUND)
-        self.plotWidget.setXRange(0, NUMBERS_DRAWN) 
-        self.plotWidget.setYRange(CHART_LOW - (TICKS/5), CHART_HIGH + (TICKS/5))
+        self.plotWidget.setXRange(0, NUMBERS_DRAWN)
+        self.plotWidget.setYRange(CHART_LOW - (TICKS / 5), CHART_HIGH + (TICKS / 5))
         self.plotWidget.showGrid(x=False, y=True)
         self.plotWidget.setStyleSheet(f"border: {WIDGET_MARGIN_SIZE}px solid {COLOUR_WIDGET_MARGIN};")  # Yellow border for development
+        self.plot = self.plotWidget.plot(pen=pg.mkPen(color=COLOUR_POSITIVE, width=LINE_WIDTH))
 
         self.plot = None
         self.results = results  # Store the roulette results
@@ -292,6 +293,34 @@ class MainWindow(QtWidgets.QMainWindow):
         font_x.setPointSize(AXIS_FONT_SIZE)
         font_x.setBold(True)
         x_axis.setTickFont(font_x)
+
+        ############################################################################################
+        # Straight Up Histogram                                                                    #
+        ############################################################################################  
+        self.histogram_straight_up = pg.PlotWidget(self)
+        self.histogram_straight_up.setGeometry(1300, 200, 600, 200)
+        self.WHEEL_FORMAT = WHEEL_FORMAT  # Store wheel format
+        # Determine the numbers on the wheel based on WHEEL_FORMAT
+        if self.WHEEL_FORMAT == 'US-000':
+            self.wheel_numbers = ['0', '00', '000'] + [str(i) for i in range(1, 37)]
+        elif self.WHEEL_FORMAT == 'US-00':
+            self.wheel_numbers = ['0', '00'] + [str(i) for i in range(1, 37)]
+        else:  # Default to European (EU-0)
+            self.wheel_numbers = ['0'] + [str(i) for i in range(1, 37)]
+        # Initialize the counts for each outcome
+        self.current_counts = {num: 0 for num in self.wheel_numbers}
+
+        # Precompute the maximum height for the y-axis based on all results
+        self.max_height = self.calculate_final_max_height()
+
+        self.histogram_straight_up.setYRange(0, self.max_height + 1)
+
+
+
+        # Update all charts
+        self.update_line_chart()
+        self.update_histogram_straight_up()
+        #self.update_histogram_horizontal()
 
         ############################################################################################
         # Last spin                                                                                #
@@ -403,7 +432,31 @@ class MainWindow(QtWidgets.QMainWindow):
         self.losses_title_label.setGeometry(LOSSES_TITLE_X_POS, LOSSES_TITLE_Y_POS, LOSSES_TITLE_SIZE_X, LOSSES_TITLE_SIZE_Y)
         self.losses_title_label.setStyleSheet(f"font-size: {LOSSES_TITLE_FONT_SIZE}px; color: {COLOUR_WHITE}; font-weight: normal; border: 1px solid {COLOUR_LOSSES_BORDER};")
         self.losses_title_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.losses_title_label.setText(LOSSES_TITLE_TEXT)
+        self.losses_title_label.setText(LOSSES_TITLE_TEXT)       
+
+    def calculate_final_max_height(self):
+        """Calculates the maximum height for the y-axis based on the entire results dataset."""
+        all_counts = {num: 0 for num in self.wheel_numbers}
+
+        # Tally up the counts for each outcome in results
+        for result in self.results:
+            if result in all_counts:
+                all_counts[result] += 1
+
+        # Return the maximum count found, with at least 1 to avoid a zero range
+        return max(all_counts.values()) if all_counts else 1
+
+    def update_line_chart(self):
+        """Logic to update the line chart."""
+        self.plot.setData(x=np.arange(len(self.cumulative_values)), y=self.cumulative_values)
+
+    def update_histogram_straight_up(self):
+        """Logic to update the vertical bar chart."""
+        x_vals = np.arange(len(self.current_counts))
+        y_vals = np.array([self.current_counts[number] for number in self.wheel_numbers])
+        self.straight_up_bars = pg.BarGraphItem(x=x_vals, height=y_vals, width=0.8, brush='b')
+        self.histogram_straight_up.addItem(self.straight_up_bars)
+
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Space:
@@ -433,6 +486,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 pen = pg.mkPen(color=COLOUR_POSITIVE if y[-1] >= 0 else COLOUR_NEGATIVE, width=LINE_WIDTH)
                 self.plot.setData(x=np.arange(len(y)), y=y, pen=pen)
                 self.plotWidget.addLine(y=0, pen=pg.mkPen(color=COLOUR_CHART, width=2, style=QtCore.Qt.DotLine))
+                
                 # Increment counters based on the value of Change
                 if df['Change'][self.index] > 0:
                     self.temp_wins += 1
@@ -441,12 +495,34 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     self.temp_pushes += 1
 
+                # Update straight-up histogram
+                number = int(result) if result.isdigit() else 0
+
+                if number in self.current_counts:
+                    self.current_counts[number] += 1
+                else:
+                    self.current_counts[number] = 1
+
+                # Update straight-up histogram
+                x_vals = np.arange(len(self.current_counts))
+                y_vals = np.array(list(self.current_counts.values()))
+
+                # Remove the old bars if they exist
+                if hasattr(self, 'straight_up_bars'):
+                    self.histogram_straight_up.removeItem(self.straight_up_bars)
+
+                # Create new bars with updated data
+                self.straight_up_bars = pg.BarGraphItem(x=x_vals, height=y_vals, width=0.8, brush='b')
+                self.histogram_straight_up.addItem(self.straight_up_bars)
+
                 # Update the labels
                 self.wins_label.setText(str(self.temp_wins))
                 self.losses_label.setText(str(self.temp_losses))
                 self.pushes_label.setText(str(self.temp_pushes))
 
                 self.index += 1
+
+                #Calculate actual percentage and update label
                 actual_percentage = self.temp_wins / self.index *100
                 self.actual_percentage_label.setText(f"{actual_percentage:.1f}%")
     
