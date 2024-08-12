@@ -1,7 +1,3 @@
-####################################################################################################
-# Modules                                                                                       #
-####################################################################################################
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 import numpy as np
@@ -25,17 +21,13 @@ WINDOW_WIDTH = 1920
 WINDOW_HEIGHT = 1080
 CANVAS_TITLE = 'Video Background'
 COLOUR_CANVAS = COLOUR_BLACK
-COLOUR_VIDEO_PLACEHOLDER = COLOUR_YELLOW
-COLOUR_WIDGET_BORDER = COLOUR_YELLOW
 
-#Data
+# Data
 INPUT_FILE = 'single_chart_input.ods'
 OUTPUT_FILE = 'single_chart_output.csv'
 
 # Chart
 CHART_HEIGHT = 200
-UPPER_LEFT_WIDTH = int(WINDOW_WIDTH * 0.65)
-UPPER_LEFT_HEIGHT = int(WINDOW_HEIGHT * 0.65)
 CURRENCY = '§'
 COLOUR_POSITIVE = COLOUR_GREEN
 COLOUR_NEGATIVE = COLOUR_RED
@@ -47,23 +39,106 @@ CHART_HIGH = 50
 CHART_LOW = -350
 TICKS = 50
 NUMBERS_DRAWN = 100
-BUFFER_VALUE =4
+BUFFER_VALUE = 4
 
-# Spun Number
-SPUN_NUMBER_SIZE = 36
-BOX_SIZE = 100
-COLOUR_SPUN_BORDER = COLOUR_WHITE
-SPUN_NUMBER_X = 1800
-SPUN_NUMBER_Y =   20
+# Spin Number
+SPIN_NUMBER_BOX_FONT_SIZE = 48
+SPIN_NUMBER_BOX_SIZE_X = 100
+SPIN_NUMBER_BOX_SIZE_Y = SPIN_NUMBER_BOX_SIZE_X
+COLOUR_SPIN_NUMBER = COLOUR_WHITE
+COLOUR_SPIN_NUMBER_BOX_BORDER = COLOUR_SPIN_NUMBER
+SPIN_NUMBER_BOX_X_POS = 18
+SPIN_NUMBER_BOX_Y_POS = 20
+#
+SPIN_NUMBER_TITLE_FONT_SIZE = 16
+COLOUR_SPIN_NUMBER_TITLE = COLOUR_WHITE
+COLOUR_SPIN_NUMBER_TITLE_BORDER = COLOUR_BLACK
+SPIN_NUMBER_TITLE_SIZE_X = 136
+SPIN_NUMBER_TITLE_SIZE_Y = int(SPIN_NUMBER_TITLE_FONT_SIZE * 1.55) 
+SPIN_NUMBER_TITLE_X_POS = 0
+SPIN_NUMBER_TITLE_Y_POS = SPIN_NUMBER_BOX_Y_POS + SPIN_NUMBER_BOX_SIZE_Y
+SPIN_NUMBER_TITLE_TEXT = 'Last Spin'
 
 # Cumulative values
-CUMULATIVE_SIZE = 36
-COLOUR_CUMULATIVE = COLOUR_WHITE
-COLOUR_CUMULATIVE_BORDER = COLOUR_WHITE
+CUMULATIVE_VALUE_FONT_SIZE = 24
+COLOUR_CUMULATIVE_VALUE = COLOUR_WHITE
+COLOUR_CUMULATIVE_VALUE_BORDER = COLOUR_BLACK
+CUMULATIVE_VALUE_SIZE_X = SPIN_NUMBER_TITLE_SIZE_X
+CUMULATIVE_VALUE_SIZE_Y = CUMULATIVE_VALUE_FONT_SIZE
+CUMULATIVE_VALUE_X_POS = 0
+CUMULATIVE_VALUE_Y_POS = 200
+#
+CUMULATIVE_VALUE_TITLE_FONT_SIZE = SPIN_NUMBER_TITLE_FONT_SIZE
+COLOUR_CUMULATIVE_VALUE_TITLE = COLOUR_SPIN_NUMBER_TITLE
+COLOUR_CUMULATIVE_VALUE_TITLE_BORDER = COLOUR_SPIN_NUMBER_TITLE_BORDER
+CUMULATIVE_VALUE_TITLE_SIZE_X = CUMULATIVE_VALUE_SIZE_X 
+CUMULATIVE_VALUE_TITLE_SIZE_Y = CUMULATIVE_VALUE_TITLE_FONT_SIZE 
+CUMULATIVE_VALUE_TITLE_X_POS = CUMULATIVE_VALUE_X_POS
+CUMULATIVE_VALUE_TITLE_Y_POS = CUMULATIVE_VALUE_Y_POS + CUMULATIVE_VALUE_SIZE_Y
+CUMULATIVE_VALUE_TITLE_TEXT = 'Profit/Loss'
+
+# Expected Percentage Values
+EXPECTED_PERCENTAGE_FONT_SIZE = CUMULATIVE_VALUE_FONT_SIZE
+EXPECTED_PERCENTAGE_SIZE_X = CUMULATIVE_VALUE_SIZE_X 
+EXPECTED_PERCENTAGE_SIZE_Y = EXPECTED_PERCENTAGE_FONT_SIZE
+COLOUR_EXPECTED_PERCENTAGE = COLOUR_CUMULATIVE_VALUE
+COLOUR_EXPECTED_PERCENTAGE_BORDER = COLOUR_CUMULATIVE_VALUE_BORDER
+EXPECTED_PERCENTAGE_X_POS = 0
+EXPECTED_PERCENTAGE_Y_POS = 300
+
+EXPECTED_PERCENTAGE_TITLE_FONT_SIZE = SPIN_NUMBER_TITLE_FONT_SIZE
+COLOUR_EXPECTED_PERCENTAGE_TITLE = COLOUR_SPIN_NUMBER_TITLE
+COLOUR_EXPECTED_PERCENTAGE_TITLE_BORDER = COLOUR_SPIN_NUMBER_TITLE_BORDER
+EXPECTED_PERCENTAGE_TITLE_SIZE_X = CUMULATIVE_VALUE_SIZE_X 
+EXPECTED_PERCENTAGE_TITLE_SIZE_Y = int(EXPECTED_PERCENTAGE_TITLE_FONT_SIZE * 2.25)
+EXPECTED_PERCENTAGE_TITLE_X_POS = CUMULATIVE_VALUE_X_POS
+EXPECTED_PERCENTAGE_TITLE_Y_POS = EXPECTED_PERCENTAGE_Y_POS + EXPECTED_PERCENTAGE_SIZE_Y
+EXPECTED_PERCENTAGE_TITLE_TEXT = 'Expected\nPercentage'
+
+# Expected Percentage Values
+ACTUAL_PERCENTAGE_FONT_SIZE = CUMULATIVE_VALUE_FONT_SIZE
+ACTUAL_PERCENTAGE_SIZE_X = CUMULATIVE_VALUE_SIZE_X 
+ACTUAL_PERCENTAGE_SIZE_Y = ACTUAL_PERCENTAGE_FONT_SIZE
+COLOUR_ACTUAL_PERCENTAGE = COLOUR_CUMULATIVE_VALUE
+COLOUR_ACTUAL_PERCENTAGE_BORDER = COLOUR_CUMULATIVE_VALUE_BORDER
+ACTUAL_PERCENTAGE_X_POS = 0
+ACTUAL_PERCENTAGE_Y_POS = 400
+
+ACTUAL_PERCENTAGE_TITLE_FONT_SIZE = SPIN_NUMBER_TITLE_FONT_SIZE
+COLOUR_ACTUAL_PERCENTAGE_TITLE = COLOUR_SPIN_NUMBER_TITLE
+COLOUR_ACTUAL_PERCENTAGE_TITLE_BORDER = COLOUR_SPIN_NUMBER_TITLE_BORDER
+ACTUAL_PERCENTAGE_TITLE_SIZE_X = CUMULATIVE_VALUE_SIZE_X 
+ACTUAL_PERCENTAGE_TITLE_SIZE_Y = int(ACTUAL_PERCENTAGE_TITLE_FONT_SIZE * 2.25)
+ACTUAL_PERCENTAGE_TITLE_X_POS = CUMULATIVE_VALUE_X_POS
+ACTUAL_PERCENTAGE_TITLE_Y_POS = ACTUAL_PERCENTAGE_Y_POS + ACTUAL_PERCENTAGE_SIZE_Y
+ACTUAL_PERCENTAGE_TITLE_TEXT = 'Actual\nPercentage'
+
+
+# Video (Blanked out area)
+COLOUR_VIDEO_PLACEHOLDER = COLOUR_YELLOW
+COLOUR_WIDGET_BORDER = COLOUR_YELLOW
+UPPER_LEFT_WIDTH = int(WINDOW_WIDTH * 0.65)
+UPPER_LEFT_HEIGHT = int(WINDOW_HEIGHT * 0.65)
+VIDEO_X_POS = int((WINDOW_WIDTH - UPPER_LEFT_WIDTH)/2)-200 # for centre
+VIDEO_Y_POS = 0
+
+# Wheel
+WHEEL_FORMAT = 'EU-0' #Options EU-0; US-00; or US-000
 
 # To find a place
 COLOUR_WIDGET_MARGIN = COLOUR_YELLOW
 WIDGET_MARGIN_SIZE=1
+
+####################################################################################################
+# Wheel calculations                                                                               #
+####################################################################################################
+
+if (WHEEL_FORMAT == 'US-000'):
+    NUMBERS_ON_WHEEL = 39
+elif (WHEEL_FORMAT == 'US-00'):
+    NUMBERS_ON_WHEEL = 38
+else: #default and errors are considered European
+    NUMBERS_ON_WHEEL = 37
 
 ####################################################################################################
 # Get number colour                                                                                #
@@ -77,11 +152,19 @@ def get_roulette_colour(number):
     return COLOUR_RED if number in red_numbers else COLOUR_BLACK
 
 ####################################################################################################
+# Function to ensure 'Result' remains a distinct string                                            #
+####################################################################################################
+def ensure_string_result(df):
+    df['Result'] = df['Result'].apply(lambda x: str(x))
+    return df
+
+
+####################################################################################################
 # Main                                                                                             #
 ####################################################################################################
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, results, cumulative_values):
+    def __init__(self, results, cumulative_values, expected_percentage,actual_percentage):
         super().__init__()
         ############################################################################################
         # Draw canvas                                                                              #
@@ -90,9 +173,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setGeometry(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
         self.setStyleSheet(f"background-color: {COLOUR_CANVAS};")
 
-        # Blanked out upper left corner (video goes here)
+        ############################################################################################
+        # Video Placeholder                                                                        #
+        ############################################################################################   
         self.blank_area = QtWidgets.QWidget(self)
-        self.blank_area.setGeometry(0, 0, UPPER_LEFT_WIDTH, UPPER_LEFT_HEIGHT)
+        self.blank_area.setGeometry(VIDEO_X_POS, VIDEO_Y_POS, UPPER_LEFT_WIDTH, UPPER_LEFT_HEIGHT)
         self.blank_area.setStyleSheet(f"background-color: {COLOUR_VIDEO_PLACEHOLDER};")
 
         ############################################################################################
@@ -136,19 +221,66 @@ class MainWindow(QtWidgets.QMainWindow):
         ############################################################################################
         # Last spin                                                                                #
         ############################################################################################ 
+        # Widget
         self.result_label = QtWidgets.QLabel(self)
-        self.result_label.setGeometry(SPUN_NUMBER_X, SPUN_NUMBER_Y, BOX_SIZE, BOX_SIZE)  # Adjusted to be square
-        self.result_label.setStyleSheet(f"font-size: {SPUN_NUMBER_SIZE}px; color: {COLOUR_CANVAS}; font-weight: bold; border: 1px solid {COLOUR_SPUN_BORDER};")
+        self.result_label.setGeometry(SPIN_NUMBER_BOX_X_POS, SPIN_NUMBER_BOX_Y_POS, SPIN_NUMBER_BOX_SIZE_X, SPIN_NUMBER_BOX_SIZE_Y)  # Adjusted to be square
+        self.result_label.setStyleSheet(f"font-size: {SPIN_NUMBER_BOX_FONT_SIZE}px; color: {COLOUR_CANVAS}; font-weight: bold; border: 1px solid {COLOUR_SPIN_NUMBER_BOX_BORDER};")
         self.result_label.setAlignment(QtCore.Qt.AlignCenter)
+        # Label
+        self.result_title_label = QtWidgets.QLabel(self)
+        self.result_title_label.setGeometry(SPIN_NUMBER_TITLE_X_POS, SPIN_NUMBER_TITLE_Y_POS, SPIN_NUMBER_TITLE_SIZE_X, SPIN_NUMBER_TITLE_SIZE_Y)
+        self.result_title_label.setStyleSheet(f"font-size: {SPIN_NUMBER_TITLE_FONT_SIZE}px; color: {COLOUR_WHITE}; font-weight: normal; border: 1px solid {COLOUR_SPIN_NUMBER_TITLE_BORDER};")
+        self.result_title_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.result_title_label.setText(SPIN_NUMBER_TITLE_TEXT)
 
         ############################################################################################
         # Cumulative value                                                                         #
         ############################################################################################ 
+        #Widget
         self.cumulative_value_label = QtWidgets.QLabel(self)
-        self.cumulative_value_label.setGeometry(UPPER_LEFT_WIDTH + 240, 20, 200, 100)
-        self.cumulative_value_label.setStyleSheet(f"font-size: {CUMULATIVE_SIZE}px; color: {COLOUR_CUMULATIVE}; font-weight: bold; border: 1px solid {COLOUR_CUMULATIVE_BORDER};")  # Yellow border for development
+        self.cumulative_value_label.setGeometry(CUMULATIVE_VALUE_X_POS, CUMULATIVE_VALUE_Y_POS, CUMULATIVE_VALUE_SIZE_X, CUMULATIVE_VALUE_SIZE_Y)
+        self.cumulative_value_label.setStyleSheet(f"font-size: {CUMULATIVE_VALUE_FONT_SIZE}px; color: {COLOUR_CUMULATIVE_VALUE}; font-weight: bold; border: 1px solid {COLOUR_CUMULATIVE_VALUE_BORDER};")  # Yellow border for development
         self.cumulative_value_label.setAlignment(QtCore.Qt.AlignCenter)
         self.cumulative_value_label.setText(f"{CURRENCY}0.00")  # Initial cumulative value display
+
+        # Label
+        self.cumulative_value_title_label = QtWidgets.QLabel(self)
+        self.cumulative_value_title_label.setGeometry(CUMULATIVE_VALUE_TITLE_X_POS, CUMULATIVE_VALUE_TITLE_Y_POS, CUMULATIVE_VALUE_TITLE_SIZE_X, CUMULATIVE_VALUE_TITLE_SIZE_Y)
+        self.cumulative_value_title_label.setStyleSheet(f"font-size: {CUMULATIVE_VALUE_TITLE_FONT_SIZE}px; color: {COLOUR_WHITE}; font-weight: normal; border: 1px solid {COLOUR_CUMULATIVE_VALUE_BORDER};")
+        self.cumulative_value_title_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.cumulative_value_title_label.setText(CUMULATIVE_VALUE_TITLE_TEXT)
+
+        ############################################################################################
+        # Expected Percentage                                                                      #
+        ############################################################################################
+        #Widget
+        self.expected_percentage_label = QtWidgets.QLabel(self)
+        self.expected_percentage_label.setGeometry(EXPECTED_PERCENTAGE_X_POS, EXPECTED_PERCENTAGE_Y_POS, EXPECTED_PERCENTAGE_SIZE_X, EXPECTED_PERCENTAGE_SIZE_Y)
+        self.expected_percentage_label.setStyleSheet(f"font-size: {EXPECTED_PERCENTAGE_FONT_SIZE}px; color: {COLOUR_WHITE}; font-weight: bold; border: 1px solid {COLOUR_EXPECTED_PERCENTAGE_BORDER};") 
+        self.expected_percentage_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.expected_percentage_label.setText(f"{expected_percentage:.1f}%")
+        # Label
+        self.expected_percentage_title_label = QtWidgets.QLabel(self)
+        self.expected_percentage_title_label.setGeometry(EXPECTED_PERCENTAGE_TITLE_X_POS, EXPECTED_PERCENTAGE_TITLE_Y_POS, EXPECTED_PERCENTAGE_TITLE_SIZE_X, EXPECTED_PERCENTAGE_TITLE_SIZE_Y)
+        self.expected_percentage_title_label.setStyleSheet(f"font-size: {EXPECTED_PERCENTAGE_TITLE_FONT_SIZE}px; color: {COLOUR_WHITE}; font-weight: normal; border: 1px solid {COLOUR_EXPECTED_PERCENTAGE_BORDER};")
+        self.expected_percentage_title_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.expected_percentage_title_label.setText(EXPECTED_PERCENTAGE_TITLE_TEXT)
+
+        ############################################################################################
+        # Actual Percentage                                                                        #
+        ############################################################################################
+        #Widget
+        self.actual_percentage_label = QtWidgets.QLabel(self)
+        self.actual_percentage_label.setGeometry(ACTUAL_PERCENTAGE_X_POS, ACTUAL_PERCENTAGE_Y_POS, ACTUAL_PERCENTAGE_SIZE_X, ACTUAL_PERCENTAGE_SIZE_Y)
+        self.actual_percentage_label.setStyleSheet(f"font-size: {ACTUAL_PERCENTAGE_FONT_SIZE}px; color: {COLOUR_WHITE}; font-weight: bold; border: 1px solid {COLOUR_ACTUAL_PERCENTAGE_BORDER};") 
+        self.actual_percentage_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.actual_percentage_label.setText(f"{actual_percentage:.1f}%")
+        # Label
+        self.actual_percentage_title_label = QtWidgets.QLabel(self)
+        self.actual_percentage_title_label.setGeometry(ACTUAL_PERCENTAGE_TITLE_X_POS, ACTUAL_PERCENTAGE_TITLE_Y_POS, ACTUAL_PERCENTAGE_TITLE_SIZE_X, ACTUAL_PERCENTAGE_TITLE_SIZE_Y)
+        self.actual_percentage_title_label.setStyleSheet(f"font-size: {ACTUAL_PERCENTAGE_TITLE_FONT_SIZE}px; color: {COLOUR_WHITE}; font-weight: normal; border: 1px solid {COLOUR_ACTUAL_PERCENTAGE_BORDER};")
+        self.actual_percentage_title_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.actual_percentage_title_label.setText(ACTUAL_PERCENTAGE_TITLE_TEXT)
 
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Space:
@@ -157,11 +289,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 result = str(self.results[self.index])
                 spin_colour = get_roulette_colour(result)
                 self.result_label.setText(result)
-                self.result_label.setStyleSheet(f"font-size: {SPUN_NUMBER_SIZE}px; color: {COLOUR_WHITE}; font-weight: bold; background-color: {spin_colour}; border: 1px solid {COLOUR_SPUN_BORDER};")
+                self.result_label.setStyleSheet(f"font-size: {SPIN_NUMBER_BOX_FONT_SIZE }px; color: {COLOUR_SPIN_NUMBER}; font-weight: bold; background-color: {spin_colour}; border: 1px solid {COLOUR_SPIN_NUMBER_BOX_BORDER};")
 
+                # Check the current index and cumulative value for debugging
+                print(f"Current index: {self.index}")
+                print(f"Cumulative Values: {self.cumulative_values}")
+                
                 # Update the cumulative value with currency sign
-                cumulative_value = self.cumulative_values[self.index + 1]  # Adjust index for cumulative
-                self.cumulative_value_label.setText(f"{CURRENCY}{cumulative_value:.2f}")
+                if self.index + 1 < len(self.cumulative_values):
+                    cumulative_value = self.cumulative_values[self.index + 1]  # Adjust index for cumulative
+                    print(f"Cumulative value: {cumulative_value}")  # Debugging
+                    self.cumulative_value_label.setText(f"{CURRENCY}{cumulative_value:.1f}")
+                else:
+                    print("Index out of range for cumulative values")
 
                 # Plot the cumulative values up to the current index
                 y = self.cumulative_values[:self.index + 2]  # Adjust index for cumulative
@@ -177,34 +317,49 @@ class MainWindow(QtWidgets.QMainWindow):
             currency_labels[i] = f'{CURRENCY}{i:,.2f}' if i >= 0 else f'-{CURRENCY}{abs(i):,.2f}'
         return currency_labels
 
+####################################################################################################
+# Main                                                                                             #
+####################################################################################################
 if __name__ == '__main__':
-    ############################################################################################
-    # Load widgets                                                                             #
-    ############################################################################################  
+    # Load the application
     app = QtWidgets.QApplication(sys.argv)
-    ############################################################################################
-    # Load data                                                                                #
-    ############################################################################################ 
-    df = pd.read_excel(INPUT_FILE, "results")
-    scoring = pd.read_excel(INPUT_FILE, "scoring")
+    
+    # Load and process data
+    df = pd.read_excel(INPUT_FILE, sheet_name='results', dtype={'Result': str})
+    scoring = pd.read_excel(INPUT_FILE, sheet_name='scoring', dtype={'Result': str})
+    
+    # Ensure 'Change' is treated as an integer for calculations
+    scoring['Change'] = pd.to_numeric(scoring['Change'], errors='coerce')
+    
+    # Merge data on 'Result'
     df = pd.merge(df, scoring, on='Result', how='left')
+
+    # Calculate cumulative values
     df['Cumulative'] = df['Change'].cumsum()
-    ############################################################################################
-    # Export Data                                                                              #
-    ############################################################################################
+
+    # Calculate expected and actual percentages
+    winning_spins = scoring[scoring['Change'] > 0].shape[0]
+    expected_percentage = (winning_spins / NUMBERS_ON_WHEEL) * 100
+
+    # Actual percentage based on spins so far
+    actual_percentage = (df[df['Change'] > 0].shape[0] / df.shape[0]) * 100
+
+    # Save the output to CSV
     df.to_csv(OUTPUT_FILE, index=False)
-
-
-
-    ############################################################################################
-    # TBD                                                                                      #
-    ############################################################################################
+    
+    # Prepare the cumulative array
     cumulative = df['Cumulative'].to_numpy()
-    # Add a zero at the beginning of the cumulative array
     cumulative = np.insert(cumulative, 0, 0)
-    cumulative = cumulative[-105:]
+    
+    # Ensure array length matches expected value for the chart
+    if len(cumulative) > 105:
+        cumulative = cumulative[:105]
+    
     results = df['Result'].tolist()
 
-    window = MainWindow(results, cumulative)
+    # Initialize the main window with processed data
+    window = MainWindow(results, cumulative, expected_percentage, actual_percentage)
     window.show()
+
+    # Start the application loop
     sys.exit(app.exec_())
